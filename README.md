@@ -9,8 +9,10 @@
     
 
 - # ABI и исходник этого контракта (по крайней мере интерфейсы ивентов)
+
   Contract - https://tiran132.github.io/json_data/MarsBaseExchange%20(1).json
   ABI - https://tiran132.github.io/json_data/MBABI.json
+  
   ```
   interface MyInterface {
     event OfferAccepted(uint256 offerId, MarsBaseExchange.MBOffer offer);
@@ -147,4 +149,5 @@
     | Объём | value передаваемого токена |
     | Цена Drive | *тут я не понял, нужна цена с оффера на MB или рыночная стоимость* |
     | Дискаунт | разница между рыночной стоимостью и ценой оффера |
+    | Адресс кошелька | Адресс кошелька привязанного пользователем в боте |
 
