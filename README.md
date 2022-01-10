@@ -5,7 +5,7 @@
   Event в контракте из представленного abi был только один - OwnershipTransferred
   https://tiran132.github.io/json_data/event_info.json
   #
-  Транзакции выходит получить все, пример транзакции - https://tiran132.github.io/json_data/tx_reciept.json
+  Транзакции выходит получить все, пример транзакции, в которой был какой либо event - https://tiran132.github.io/json_data/tx_reciept.json
     
 
 - # ABI и исходник этого контракта (по крайней мере интерфейсы ивентов)
