@@ -1,6 +1,6 @@
 # Получение всех tx с erc-20 contract  
 - # адрес актуальной версии контракта в rinkeby
-  0xCcCF2Fb4B674121526c6b60cF711c1791C0ffE84
+  0xCcCF2Fb4B674121526c6b60cF711c1791C0ffE84 (https://rinkeby.etherscan.io/address/0xCcCF2Fb4B674121526c6b60cF711c1791C0ffE84)
 - # пример ивентов на этом контракте
   Event в контракте из представленного abi был только один - OwnershipTransferred
   https://tiran132.github.io/json_data/event_info.json
