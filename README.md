@@ -2,7 +2,7 @@
 - # адрес актуальной версии контракта в rinkeby
   0xCcCF2Fb4B674121526c6b60cF711c1791C0ffE84 (https://rinkeby.etherscan.io/address/0xCcCF2Fb4B674121526c6b60cF711c1791C0ffE84)
 - # пример ивентов на этом контракте
-  Event в контракте из представленного abi был только один (если искать по event-ам из ABI) - OwnershipTransferred
+  Event в контракте из представленного abi был только один (если искать по event-ам из ABI - contract.events.<eventName>) - **OwnershipTransferred**
   https://tiran132.github.io/json_data/event_info.json
   #
   Транзакции выходит получить все (я получаю все тразакции в которых был event, но в них не удаётся достать нужную информацию), пример такой транзакции - https://tiran132.github.io/json_data/tx_reciept.json
