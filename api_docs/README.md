@@ -4,11 +4,13 @@
  
 
 - /[tokens1](##/tokens1)
-- /[amount_token2](##/amount_token2)
+- /[amount_token2_json](##/amount_token2_json)
 - /[with_token1](##/with_token1)
-- /[circulating_supply](##/circulating_supply)
+- /[circulating_supply_json](##/circulating_supply_json)
 - /[get_USD](##/get_USD)
 - /[calculate](##/calculate)
+- /[calculate_path_cex](##/calculate_path_cex)
+- /[calculate_path_dex](##/calculate_path_dex)
 
 ## /tokens1
 Возвращает все токены, по которым работает кальк
@@ -25,7 +27,7 @@
 []
 ```
 
-## /amount_token2
+## /amount_token2_json
 Возвращает предполагаемый (опираясь на курс в $) объём token2
 
 **Type**: GET, POST
@@ -37,13 +39,19 @@
 |amount| объём токена А|
 
 #### Response Example:
-`https://marsbase.zlumer.com/calc-api/amount_token2?token1=ETH&token2=USDT&amount=100`
+`https://marsbase.zlumer.com/calc-api/amount_token2_json?token1=ETH&token2=USDT&amount=100`
 ```
-315388.6703608296
+{
+    "result": 315388.6703608296,
+    "status": true
+}
+
 ```
 **Bad result**:
 ```
-0
+{
+    "status": false
+}
 ```
 ## /with_token1
 Возвращает все токены, с которыми есть обмен у токена А
@@ -63,7 +71,7 @@
 ```
 ["USDC", "BUSD", ... "ALUSD", "CUSDC"]  - only Stables
 ```
-## /circulating_supply
+## /circulating_supply_json
 
 Возвращает circulating_supply токена с CoinMaretCap
 
@@ -74,18 +82,24 @@
 |token1| токен для которого узнаём значение|
 
 #### Response Example:
-`hhttps://marsbase.zlumer.com/calc-api/circulating_supply?token1=PAXG`
+`hhttps://marsbase.zlumer.com/calc-api/circulating_supply_json?token1=PAXG`
 ```
-318453.941
+{
+    "result": 318453.941,
+    "status": True,
+}
+
 ```
 **Bad result**: (бывает, что в cmc нет значенией circulating_supply)
 ```
-1000000
+{
+    "status": false,
+}
 ``` 
 
 
 ## /get_USD
-Возвращает курс токенов + их /amount_token2
+Возвращает курс токенов + их /amount_token2_json
 
 **Type**: GET, POST
 **Params**
@@ -173,7 +187,7 @@
 |---|---|
 | token1_USD | курс токна А |
 | token2_USD | курс токна Б |
-| expected_USD | /amount_token2 |
+| expected_USD | /amount_token2_json |
 | real_exchanged_token | Расчитайнный объём токена Б, который получится в результате обмена |
 | real_exchange_USD | Расчитайнный объём токена Б в USD |
 | slippage_USD | слипэдж в USD |
@@ -184,4 +198,138 @@
 | liquidity_provider_fee (DEX_only) | комиссия провайдера в USD |
 | gasFees_USD (DEX_only) | комиссия на gas в USD |
 
-Routes in dev
+
+
+
+## /calculate_path_cex
+Возвращает все расчёты на CEX (+ routes)
+
+**Type**: GET, POST
+**Params**
+| name | description |
+|---|---|
+|token1| токен А|
+|token2| токен Б|
+|amount| объём токена А|
+
+#### Response Example:
+`https://marsbase.zlumer.com/calc-api/calculate_path_cex?token1=USDT&token2=1INCH&amount=100000`
+```
+{
+   "result":{
+      "token1_USD":1.0004183799317068,
+      "token2_USD":1.7893579162422115,
+      "expected_USD":100041.83799317067,
+      "real_exchanged_token":55562.83432231578,
+      "real_exchange_USD":99421.7974434902,
+      "slippage_USD":620.0405496804742,
+      "txcost_USD":99.4217974434902,
+      "all_spendings_USD":719.4623471239644,
+      "spending_percent":0.6197812456452481,
+      "all_spendings_percent":0.7191614643996027,
+      "routes":[
+         {
+            "path":[
+               "USDT",
+               "1INCH"
+            ],
+            "end_amounts":[
+               55562.83432231578
+            ],
+            "slippages":[
+               0.6197812456452481
+            ],
+            "end_slippage":0.6197812456452528
+         }
+      ]
+   },
+   "status":true
+}
+```
+**Bad result**:
+```
+{
+   "status":false,
+   "result":{},
+}
+```
+
+#### Response Owerview:
+| name | description |
+|---|---|
+| token1_USD | курс токна А |
+| token2_USD | курс токна Б |
+| expected_USD | /amount_token2_json |
+| real_exchanged_token | Расчитайнный объём токена Б, который получится в результате обмена |
+| real_exchange_USD | Расчитайнный объём токена Б в USD |
+| slippage_USD | слипэдж в USD |
+| txcost_USD | комиссия биржи на транзакцию в USD |
+| all_spendings_USD | Все расходы на сделку в USD |
+| spending_percent | Процент потерь |
+| all_spendings_percent | Процент потерь учитывая все расходы |
+| routes | Вся информация о лучшем пути (везде 100%) |
+
+
+
+
+## /calculate_path_dex
+Возвращает все расчёты на  DEX (+ routes)
+
+**Type**: GET, POST
+**Params**
+| name | description |
+|---|---|
+|token1| токен А|
+|token2| токен Б|
+|amount| объём токена А|
+
+#### Response Example:
+`https://marsbase.zlumer.com/calc-api/calculate_path_dex?token1=USDT&token2=1INCH&amount=100000`
+```
+{
+   "status":true,
+   "result":{
+      "token1_USD":1.0004183799317068,
+      "token2_USD":1.7893579162422115,
+      "expected_USD":100041.83799317067,
+      "real_exchanged_token":64901.38430120595,
+      "real_exchange_USD":116131.80577444086,
+      "slippage_USD":0,
+      "liquidity_provider_fee":348.3954173233226,
+      "gasFees_USD":255.22578084768375,
+      "all_spendings_USD":603.6211981710063,
+      "spending_percent":0.0,
+      "all_spendings_percent":0.603368760790073,
+      "routes":[
+         [
+            "USDT",
+            "ETH",
+            "1INCH"
+         ]
+      ]
+   }
+}
+```
+**Bad result**:
+```
+{
+   "status":false,
+   "result":{},
+}
+```
+
+#### Response Owerview:
+| name | description |
+|---|---|
+| token1_USD | курс токна А |
+| token2_USD | курс токна Б |
+| expected_USD | /amount_token2_json |
+| real_exchanged_token | Расчитайнный объём токена Б, который получится в результате обмена |
+| real_exchange_USD | Расчитайнный объём токена Б в USD |
+| slippage_USD | слипэдж в USD |
+| all_spendings_USD | Все расходы на сделку в USD |
+| spending_percent | Процент потерь |
+| all_spendings_percent | Процент потерь учитывая все расходы |
+| liquidity_provider_fee | комиссия провайдера в USD |
+| gasFees_USD | комиссия на gas в USD |
+| routes | Вся информация о лучшем пути (везде 100%) |
